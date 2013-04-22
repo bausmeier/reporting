@@ -29,11 +29,17 @@ var handleAuthorized = function() {
     'ids': 'ga:68220841',
     'start-date': '2013-04-17',
     'end-date': '2013-04-22',
-    'metrics': 'ga:visits'
+    'metrics': 'ga:visitors,ga:newVisits',
+    'dimensions': 'ga:customVarValue1'
   }
   gapi.client.analytics.data.ga.get(query).execute(handleResults);
 }
 
 var handleResults = function(results) {
-  alert('Total visits: '+results.rows[0][0]);
+  var content  = $('#content');
+  content.empty();
+  content.append('<tr><th>Tenant</th><th>Unique visitors</th><th>New visitors</th></tr>');
+  results.rows.forEach(function(row) {
+    content.append('<tr><td>'+row[0]+'</td><td>'+row[1]+'</td><td>'+row[2]+'</td></tr>');
+  });
 }

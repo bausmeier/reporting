@@ -2,7 +2,19 @@
 <html>
   <head>
     <title>MWL Reporting</title>
+    <style>
+      th, td {
+        padding:0 5px;
+      }
+      table {
+        border-collapse:collapse;
+      }
+      table, th, td {
+        border:1px solid #000;
+      }
+    </style>
   <body>
-    Hello world!
+    <table id="content"></table>
     <script src="reporting.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
