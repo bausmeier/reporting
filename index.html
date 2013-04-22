@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>MWL Reporting</title>
     <style>
+      html {
+        padding:10px;
+      }
       th, td {
         padding:0 5px;
       }
@@ -18,9 +21,12 @@
       }
     </style>
   <body>
-    <h3>Visits in the past 2 weeks</h3>
-    <table id="content"></table>
-    <button id="authorize">Authorize</button>
+    <section id="content">
+      <h3>Visits in the past 2 weeks</h3>
+      <span class="loading">Loading...</span>
+      <button id="authorize">Authorize</button>
+      <table id="content"></table>
+    </section>
     <script src="moment.min.js"></script>
     <script src="reporting.js"></script>
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>

@@ -19,6 +19,7 @@ var checkAuth = function() {
 var handleAuthResult = function(authResult) {
   if (authResult) {
     gapi.client.load('analytics', 'v3', handleAuthorized);
+    $('.loading').show();
     $('#authorize').hide();
   } else {
     console.log('Authorization failed');
@@ -31,11 +32,13 @@ var handleAuthResult = function(authResult) {
     authButton.on('click', function() {
       gapi.auth.authorize(data, handleAuthResult);
     });
+    $('.loading').hide();
     authButton.show();
   }
 }
 
 var handleAuthorized = function() {
+  $('.loading').hide();
   var today = moment().format('YYYY-MM-DD'),
       twoWeeksAgo = moment().subtract('weeks', 2).format('YYYY-MM-DD');
   var query = {
