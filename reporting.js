@@ -30,7 +30,8 @@ var handleAuthorized = function() {
     'start-date': '2013-04-17',
     'end-date': '2013-04-22',
     'metrics': 'ga:visitors,ga:newVisits',
-    'dimensions': 'ga:customVarValue1'
+    'dimensions': 'ga:customVarValue1',
+    'sort': '-ga:visitors'
   }
   gapi.client.analytics.data.ga.get(query).execute(handleResults);
 }
