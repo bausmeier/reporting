@@ -19,8 +19,19 @@ var checkAuth = function() {
 var handleAuthResult = function(authResult) {
   if (authResult) {
     gapi.client.load('analytics', 'v3', handleAuthorized);
+    $('#authorize').hide();
   } else {
-    console.error('Authorization failed');
+    console.log('Authorization failed');
+    var data = {
+      client_id: clientId,
+      scope: scopes,
+      immediate: false
+    }
+    var authButton = $('#authorize');
+    authButton.on('click', function() {
+      gapi.auth.authorize(data, handleAuthResult);
+    });
+    authButton.show();
   }
 }
 
