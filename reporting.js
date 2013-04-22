@@ -20,7 +20,7 @@ var handleAuthResult = function(authResult) {
   if (authResult) {
     gapi.client.load('analytics', 'v3', handleAuthorized);
   } else {
-    console.error('Auth failed');
+    console.error('Authorization failed');
   }
 }
 
