@@ -25,10 +25,12 @@ var handleAuthResult = function(authResult) {
 }
 
 var handleAuthorized = function() {
+  var today = moment().format('YYYY-MM-DD'),
+      twoWeeksAgo = moment().subtract('weeks', 2).format('YYYY-MM-DD');
   var query = {
     'ids': 'ga:68220841',
-    'start-date': '2013-04-17',
-    'end-date': '2013-04-22',
+    'start-date': twoWeeksAgo,
+    'end-date': today,
     'metrics': 'ga:visitors,ga:newVisits',
     'dimensions': 'ga:customVarValue1',
     'sort': '-ga:visitors'
