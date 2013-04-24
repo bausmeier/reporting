@@ -67,7 +67,7 @@ var runQuery = function(startDate, endDate, callback) {
     'ids': 'ga:68220841',
     'start-date': startDate,
     'end-date': endDate,
-    'metrics': 'ga:visitors,ga:newVisits',
+    'metrics': 'ga:visitors',
     'dimensions': 'ga:customVarValue1',
     'sort': 'ga:customVarValue1'
   }
@@ -75,16 +75,30 @@ var runQuery = function(startDate, endDate, callback) {
 }
 
 var handleResults = function(results) {
-  var content = $('#this-month');
+  var content = $('#attrition');
   content.empty();
-  content.append('<tr><th>Tenant</th><th>Unique visitors</th><th>New visitors</th></tr>');
+  content.append('<tr><th>Tenant</th><th>Last month</th><th>This month</th><th>Attrition %</th></tr>');
+  var tenants = {}
   results.thisMonth.rows.forEach(function(row) {
-    content.append('<tr><td>'+row[0]+'</td><td>'+row[1]+'</td><td>'+row[2]+'</td></tr>');
+    var key = row[0];
+    var tenant = tenants[key];
+    tenant = tenant || {};
+    tenant.thisMonth = row[1];
+    tenants[key] = tenant;
   });
-  content = $('#last-month');
-  content.empty();
-  content.append('<tr><th>Tenant</th><th>Unique visitors</th><th>New visitors</th></tr>');
   results.lastMonth.rows.forEach(function(row) {
-    content.append('<tr><td>'+row[0]+'</td><td>'+row[1]+'</td><td>'+row[2]+'</td></tr>');
+    var key = row[0];
+    var tenant = tenants[key];
+    tenant = tenant || {};
+    tenant.lastMonth = row[1];
+    tenants[key] = tenant;
   });
+  for (var key in tenants) {
+    var tenant = tenants[key];
+    var lastMonth = tenant.lastMonth || 0;
+    var thisMonth = tenant.thisMonth || 0;
+    var diff = thisMonth - lastMonth;
+    var attrition = lastMonth === 0 ? '&infin;' : -Math.round(diff / lastMonth * 100);
+    content.append('<tr><td>'+key+'</td><td>'+lastMonth+'</td><td>'+thisMonth+'</td><td>'+attrition+'</td></tr>');
+  }
 }
