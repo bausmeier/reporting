@@ -1,4 +1,4 @@
-var clientId = '16305868429.apps.googleusercontent.com';
+var clientId = '16305868429-70lrbni5o6mi87bifvps8unt04fbl0ak.apps.googleusercontent.com';
 var apiKey = 'AIzaSyBukblQ5fz05neRK5B02AiwvGG6MaqmQ90';
 var scopes = 'https://www.googleapis.com/auth/analytics.readonly';
 
@@ -38,7 +38,16 @@ var handleAuthResult = function(authResult) {
 }
 
 var handleAuthorized = function() {
-  $('.loading').hide();
+  async.parallel({
+    thisMonth: queryThisMonth,
+    lastMonth: queryLastMonth
+  }, function(err, results) {
+    $('.loading').hide();
+    handleResults(results.thisMonth);
+  });
+}
+
+var queryThisMonth = function(callback) {
   var today = moment().format('YYYY-MM-DD'),
       twoWeeksAgo = moment().subtract('weeks', 2).format('YYYY-MM-DD');
   var query = {
@@ -49,7 +58,28 @@ var handleAuthorized = function() {
     'dimensions': 'ga:customVarValue1',
     'sort': '-ga:visitors'
   }
-  gapi.client.analytics.data.ga.get(query).execute(handleResults);
+  runQuery(query, callback);
+}
+
+var queryLastMonth = function(callback) {
+  var twoWeeksAgo = moment().subtract('weeks', 2).format('YYYY-MM-DD'),
+      fourWeeksAgo = moment().subtract('weeks', 4).format('YYYY-MM-DD');
+  var query = {
+    'ids': 'ga:68220841',
+    'start-date': fourWeeksAgo,
+    'end-date': twoWeeksAgo,
+    'metrics': 'ga:visitors,ga:newVisits',
+    'dimensions': 'ga:customVarValue1',
+    'sort': '-ga:visitors'
+  }
+  runQuery(query, callback)
+}
+
+var runQuery = function(query, callback) {
+    var wrapResult = function(result) {
+      callback(null, result);
+    }
+    gapi.client.analytics.data.ga.get(query).execute(wrapResult);
 }
 
 var handleResults = function(results) {
