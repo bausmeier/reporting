@@ -50,36 +50,28 @@ var handleAuthorized = function() {
 var queryThisMonth = function(callback) {
   var today = moment().format('YYYY-MM-DD'),
       twoWeeksAgo = moment().subtract('weeks', 2).format('YYYY-MM-DD');
-  var query = {
-    'ids': 'ga:68220841',
-    'start-date': twoWeeksAgo,
-    'end-date': today,
-    'metrics': 'ga:visitors,ga:newVisits',
-    'dimensions': 'ga:customVarValue1',
-    'sort': '-ga:visitors'
-  }
-  runQuery(query, callback);
+  runQuery(twoWeeksAgo, today, callback);
 }
 
 var queryLastMonth = function(callback) {
   var twoWeeksAgo = moment().subtract('weeks', 2).format('YYYY-MM-DD'),
       fourWeeksAgo = moment().subtract('weeks', 4).format('YYYY-MM-DD');
+  runQuery(fourWeeksAgo, twoWeeksAgo, callback)
+}
+
+var runQuery = function(startDate, endDate, callback) {
+  var wrapResult = function(result) {
+    callback(null, result);
+  }
   var query = {
     'ids': 'ga:68220841',
-    'start-date': fourWeeksAgo,
-    'end-date': twoWeeksAgo,
+    'start-date': startDate,
+    'end-date': endDate,
     'metrics': 'ga:visitors,ga:newVisits',
     'dimensions': 'ga:customVarValue1',
     'sort': '-ga:visitors'
   }
-  runQuery(query, callback)
-}
-
-var runQuery = function(query, callback) {
-    var wrapResult = function(result) {
-      callback(null, result);
-    }
-    gapi.client.analytics.data.ga.get(query).execute(wrapResult);
+  gapi.client.analytics.data.ga.get(query).execute(wrapResult);
 }
 
 var handleResults = function(results) {
