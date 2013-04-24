@@ -20,6 +20,7 @@
         display:none;
       }
       .result {
+        display:inline-block;
         padding:20px;
       }
     </style>
@@ -27,14 +28,14 @@
     <section id="container">
       <button id="authorize">Authorize</button>
       <div class="result">
-        <h3>This month</h3>
-        <span class="loading">Loading...</span>
-        <table id="this-month"></table>
-      </div>
-      <div class="result">
         <h3>Last month</h3>
         <span class="loading">Loading...</span>
         <table id="last-month"></table>
+      </div>
+      <div class="result">
+        <h3>This month</h3>
+        <span class="loading">Loading...</span>
+        <table id="this-month"></table>
       </div>
     </section>
     <script src="moment.min.js"></script>

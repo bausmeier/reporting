@@ -69,7 +69,7 @@ var runQuery = function(startDate, endDate, callback) {
     'end-date': endDate,
     'metrics': 'ga:visitors,ga:newVisits',
     'dimensions': 'ga:customVarValue1',
-    'sort': '-ga:visitors'
+    'sort': 'ga:customVarValue1'
   }
   gapi.client.analytics.data.ga.get(query).execute(wrapResult);
 }
