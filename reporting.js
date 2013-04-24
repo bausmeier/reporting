@@ -1,4 +1,4 @@
-var clientId = '16305868429-70lrbni5o6mi87bifvps8unt04fbl0ak.apps.googleusercontent.com';
+var clientId = '16305868429.apps.googleusercontent.com';
 var apiKey = 'AIzaSyBukblQ5fz05neRK5B02AiwvGG6MaqmQ90';
 var scopes = 'https://www.googleapis.com/auth/analytics.readonly';
 
