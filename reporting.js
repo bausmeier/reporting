@@ -98,7 +98,7 @@ var handleResults = function(results) {
     var lastMonth = tenant.lastMonth || 0;
     var thisMonth = tenant.thisMonth || 0;
     var diff = thisMonth - lastMonth;
-    var attrition = lastMonth === 0 ? '&infin;' : -Math.round(diff / lastMonth * 100);
+    var attrition = lastMonth === 0 ? 0 : -Math.round(diff / lastMonth * 100);
     content.append('<tr><td>'+key+'</td><td>'+lastMonth+'</td><td>'+thisMonth+'</td><td>'+attrition+'</td></tr>');
   }
 }
