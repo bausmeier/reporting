@@ -19,13 +19,23 @@
       #authorize {
         display:none;
       }
+      .result {
+        padding:20px;
+      }
     </style>
   <body>
     <section id="container">
-      <h3>Visits in the past 2 weeks</h3>
-      <span class="loading">Loading...</span>
       <button id="authorize">Authorize</button>
-      <table id="content"></table>
+      <div class="result">
+        <h3>This month</h3>
+        <span class="loading">Loading...</span>
+        <table id="this-month"></table>
+      </div>
+      <div class="result">
+        <h3>Last month</h3>
+        <span class="loading">Loading...</span>
+        <table id="last-month"></table>
+      </div>
     </section>
     <script src="moment.min.js"></script>
     <script src="zepto.min.js"></script>

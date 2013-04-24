@@ -43,20 +43,20 @@ var handleAuthorized = function() {
     lastMonth: queryLastMonth
   }, function(err, results) {
     $('.loading').hide();
-    handleResults(results.thisMonth);
+    handleResults(results);
   });
 }
 
 var queryThisMonth = function(callback) {
   var today = moment().format('YYYY-MM-DD'),
-      twoWeeksAgo = moment().subtract('weeks', 2).format('YYYY-MM-DD');
-  runQuery(twoWeeksAgo, today, callback);
+      endOfLastMonth = moment().subtract('months', 1).format('YYYY-MM-DD');
+  runQuery(endOfLastMonth, today, callback);
 }
 
 var queryLastMonth = function(callback) {
-  var twoWeeksAgo = moment().subtract('weeks', 2).format('YYYY-MM-DD'),
-      fourWeeksAgo = moment().subtract('weeks', 4).format('YYYY-MM-DD');
-  runQuery(fourWeeksAgo, twoWeeksAgo, callback)
+  var endOfLastMonth = moment().subtract('months', 1).format('YYYY-MM-DD');
+      startOfLastMonth = moment().subtract('months', 2).format('YYYY-MM-DD');
+  runQuery(startOfLastMonth, endOfLastMonth, callback)
 }
 
 var runQuery = function(startDate, endDate, callback) {
@@ -75,10 +75,16 @@ var runQuery = function(startDate, endDate, callback) {
 }
 
 var handleResults = function(results) {
-  var content  = $('#content');
+  var content = $('#this-month');
   content.empty();
   content.append('<tr><th>Tenant</th><th>Unique visitors</th><th>New visitors</th></tr>');
-  results.rows.forEach(function(row) {
+  results.thisMonth.rows.forEach(function(row) {
+    content.append('<tr><td>'+row[0]+'</td><td>'+row[1]+'</td><td>'+row[2]+'</td></tr>');
+  });
+  content = $('#last-month');
+  content.empty();
+  content.append('<tr><th>Tenant</th><th>Unique visitors</th><th>New visitors</th></tr>');
+  results.lastMonth.rows.forEach(function(row) {
     content.append('<tr><td>'+row[0]+'</td><td>'+row[1]+'</td><td>'+row[2]+'</td></tr>');
   });
 }
