@@ -19,8 +19,9 @@ var checkAuth = function() {
 var handleAuthResult = function(authResult) {
   if (authResult) {
     gapi.client.load('analytics', 'v3', handleAuthorized);
-    $('.loading').show();
     $('#authorize').hide();
+    $('.report').show();
+    $('.loading').show();
   } else {
     console.log('Authorization failed');
     var data = {
