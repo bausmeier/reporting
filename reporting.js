@@ -75,24 +75,24 @@ var runQuery = function(startDate, endDate, callback) {
   gapi.client.analytics.data.ga.get(query).execute(wrapResult);
 }
 
+var addTenantData = function(tenants, row, field) {
+    var key = row[0];
+    var tenant = tenants[key];
+    tenant = tenant || {};
+    tenant[field] = row[1];
+    tenants[key] = tenant;
+}
+
 var handleResults = function(results) {
   var content = $('#attrition');
   content.empty();
   content.append('<tr><th>Tenant</th><th>Last month</th><th>This month</th><th>Attrition %</th></tr>');
   var tenants = {}
-  results.thisMonth.rows.forEach(function(row) {
-    var key = row[0];
-    var tenant = tenants[key];
-    tenant = tenant || {};
-    tenant.thisMonth = row[1];
-    tenants[key] = tenant;
-  });
-  results.lastMonth.rows.forEach(function(row) {
-    var key = row[0];
-    var tenant = tenants[key];
-    tenant = tenant || {};
-    tenant.lastMonth = row[1];
-    tenants[key] = tenant;
+  var keys = Object.keys(results);
+  keys.forEach(function(key) {
+    results[key].rows.forEach(function(row) {
+      addTenantData(tenants, row, key);
+    });
   });
   for (var key in tenants) {
     var tenant = tenants[key];
