@@ -16,24 +16,27 @@
       table, th, td {
         border:1px solid #000;
       }
-      #authorize {
-        display:none;
-      }
-      .report {
+      #authorize, .report, .search {
         display:none;
       }
     </style>
   <body>
     <section id="container">
       <button id="authorize">Authorize</button>
-      <div class="report">
-        <h3>Attrition</h3>
-        <table id="attrition"></table>
+      <div class="search">
+        <input type="text" placeholder="Tenant name"/>
+        <button onclick="search();">Run</button>
       </div>
       <span class="loading">Loading...</span>
+      <div class="report">
+        <h1>Pages</h1>
+        <table id="pages"></table>
+        <h1>Events</h1>
+        <table id="events"></table>
+      </div>
     </section>
-    <script src="reporting/moment.min.js"></script>
-    <script src="reporting/zepto.min.js"></script>
-    <script src="reporting/async.js"></script>
-    <script src="reporting/reporting.js"></script>
+    <script src="moment.min.js"></script>
+    <script src="zepto.min.js"></script>
+    <script src="async.js"></script>
+    <script src="reporting.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>

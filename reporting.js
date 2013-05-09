@@ -13,14 +13,15 @@ var checkAuth = function() {
     scope: scopes,
     immediate: true
   }
+  console.log('Authorizing');
   gapi.auth.authorize(data, handleAuthResult);
 }
 
 var handleAuthResult = function(authResult) {
   if (authResult) {
+    console.log('Authorization succeeded');
     gapi.client.load('analytics', 'v3', handleAuthorized);
     $('#authorize').hide();
-    $('.report').show();
     $('.loading').show();
   } else {
     console.log('Authorization failed');
@@ -39,67 +40,60 @@ var handleAuthResult = function(authResult) {
 }
 
 var handleAuthorized = function() {
-  async.parallel({
-    thisMonth: queryThisMonth,
-    lastMonth: queryLastMonth
-  }, function(err, results) {
-    $('.loading').hide();
-    handleResults(results);
-  });
+  $('.loading').hide();
+  $('.search').show();
 }
 
-var queryThisMonth = function(callback) {
-  var today = moment().format('YYYY-MM-DD'),
-      endOfLastMonth = moment().subtract('months', 1).format('YYYY-MM-DD');
-  runQuery(endOfLastMonth, today, callback);
+var search = function() {
+  console.log('searching');
+  $('#pages').empty();
+  $('#events').empty();
+  $('.report').show();
+  var tenant = $('input').val()
+    .replace('\\','\\\\')
+    .replace(',', '\\,')
+    .replace(';','\\;');
+  console.log(tenant);
+  queryPages(tenant);
+  queryEvents(tenant);
 }
 
-var queryLastMonth = function(callback) {
-  var endOfLastMonth = moment().subtract('months', 1).format('YYYY-MM-DD');
-      startOfLastMonth = moment().subtract('months', 2).format('YYYY-MM-DD');
-  runQuery(startOfLastMonth, endOfLastMonth, callback)
-}
-
-var runQuery = function(startDate, endDate, callback) {
-  var wrapResult = function(result) {
-    callback(null, result);
-  }
+var queryPages = function(tenant) {
   var query = {
     'ids': 'ga:68220841',
-    'start-date': startDate,
-    'end-date': endDate,
-    'metrics': 'ga:visitors',
-    'dimensions': 'ga:customVarValue1',
-    'sort': 'ga:customVarValue1'
+    'start-date': '2013-04-01',
+    'end-date': '2013-05-08',
+    'metrics': 'ga:pageViews',
+    'dimensions': 'ga:pagePath',
+    'filters': 'ga:customVarValue1=~' + tenant
   }
-  gapi.client.analytics.data.ga.get(query).execute(wrapResult);
+  gapi.client.analytics.data.ga.get(query).execute(handlePageResults);
 }
 
-var addTenantData = function(tenants, row, field) {
-    var key = row[0];
-    var tenant = tenants[key];
-    tenant = tenant || {};
-    tenant[field] = row[1];
-    tenants[key] = tenant;
+var queryEvents = function(tenant) {
+  var query = {
+    'ids': 'ga:68220841',
+    'start-date': '2013-04-01',
+    'end-date': '2013-05-08',
+    'metrics': 'ga:totalEvents',
+    'dimensions': 'ga:eventCategory,ga:eventAction',
+    'filters': 'ga:customVarValue1=~' + tenant
+  }
+  gapi.client.analytics.data.ga.get(query).execute(handleEventResults);
 }
 
-var handleResults = function(results) {
-  var content = $('#attrition');
-  content.empty();
-  content.append('<tr><th>Tenant</th><th>Last month</th><th>This month</th><th>Attrition %</th></tr>');
-  var tenants = {}
-  var keys = Object.keys(results);
-  keys.forEach(function(key) {
-    results[key].rows.forEach(function(row) {
-      addTenantData(tenants, row, key);
-    });
+var handlePageResults = function(results) {
+  var content = $('#pages');
+  content.append('<tr><th>Page path</th><th>Page views</th></tr>');
+  results.rows.forEach(function(row) {
+    content.append('<tr><td>'+row[0]+'</td><td>'+row[1]+'</td></tr>');
   });
-  for (var key in tenants) {
-    var tenant = tenants[key];
-    var lastMonth = tenant.lastMonth || 0;
-    var thisMonth = tenant.thisMonth || 0;
-    var diff = thisMonth - lastMonth;
-    var attrition = lastMonth === 0 ? 0 : -Math.round(diff / lastMonth * 100);
-    content.append('<tr><td>'+key+'</td><td>'+lastMonth+'</td><td>'+thisMonth+'</td><td>'+attrition+'</td></tr>');
-  }
+}
+
+var handleEventResults = function(results) {
+  var content = $('#events');
+  content.append('<tr><th>Event category</th><th>Event action</th><th>Count</th></tr>');
+  results.rows.forEach(function(row) {
+    content.append('<tr><td>'+row[0]+'</td><td>'+row[1]+'</td><td>'+row[2]+'</td></tr>');
+  });
 }
