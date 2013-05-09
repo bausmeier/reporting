@@ -94,6 +94,6 @@ var handleEventResults = function(results) {
   var content = $('#events');
   content.append('<tr><th>Event category</th><th>Event action</th><th>Count</th><th>Unique</th></tr>');
   results.rows.forEach(function(row) {
-    content.append('<tr><td>'+row[0]+'</td><td>'+row[1]+'</td><td>'+row[2]+'</td><td>'+row[3]+'</td><</tr>');
+    content.append('<tr><td>'+row[0]+'</td><td>'+row[1]+'</td><td>'+row[2]+'</td><td>'+row[3]+'</td></tr>');
   });
 }
