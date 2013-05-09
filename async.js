@@ -1,3 +1,4 @@
+/*Borrowed under the MIT license from https://github.com/caolan/async*/
 /*global setImmediate: false, setTimeout: false, console: false */
 (function () {
 
