@@ -51,6 +51,13 @@ var search = function() {
   $('.report').show();
   var tenant = $('input').val()
     .replace('\\','\\\\')
+    .replace('.','\\.')
+    .replace('^','\\^')
+    .replace('$','\\$')
+    .replace('*','\\*')
+    .replace('+','\\+')
+    .replace('?','\\?')
+    .replace('|','\\|')
     .replace('(','\\(')
     .replace(')','\\)')
     .replace('[','\\[')
