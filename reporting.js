@@ -48,6 +48,8 @@ var search = function() {
   console.log('searching');
   $('#pages').empty();
   $('#events').empty();
+  $('#pages-export').hide();
+  $('#events-export').hide();
   $('.report').show();
   var tenant = $('input').val()
     .replace('\\','\\\\')
@@ -99,6 +101,7 @@ var handlePageResults = function(results) {
   results.rows.forEach(function(row) {
     content.append('<tr><td>'+row[0]+'</td><td>'+row[1]+'</td></tr>');
   });
+  $('#pages-export').show();
 }
 
 var handleEventResults = function(results) {
@@ -107,4 +110,9 @@ var handleEventResults = function(results) {
   results.rows.forEach(function(row) {
     content.append('<tr><td>'+row[0]+'</td><td>'+row[1]+'</td><td>'+row[2]+'</td><td>'+row[3]+'</td></tr>');
   });
+  $('#events-export').show();
+}
+
+var exportToCSV = function(item) {
+  $(item).TableCSVExport({delivery: 'download', separator: '\t'});
 }
