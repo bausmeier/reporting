@@ -75,7 +75,7 @@ var queryPages = function(tenant) {
   var query = {
     'ids': 'ga:68220841',
     'start-date': '2013-04-01',
-    'end-date': '2013-05-08',
+    'end-date': moment().format('YYYY-MM-DD'),
     'metrics': 'ga:pageViews',
     'dimensions': 'ga:pagePath',
     'filters': 'ga:customVarValue1=~' + tenant
@@ -87,7 +87,7 @@ var queryEvents = function(tenant) {
   var query = {
     'ids': 'ga:68220841',
     'start-date': '2013-04-01',
-    'end-date': '2013-05-08',
+    'end-date': moment().format('YYYY-MM-DD'),
     'metrics': 'ga:totalEvents,ga:uniqueEvents',
     'dimensions': 'ga:eventCategory,ga:eventAction',
     'filters': 'ga:customVarValue1=~' + tenant
